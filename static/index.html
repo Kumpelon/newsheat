@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>News Dashboard</title>
+  <meta name="description" content="Your daily news briefing - Choose between World News or Sports dashboard">
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=Merriweather:wght@400;700;900&family=Bebas+Neue&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- External CSS -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+  <main class="start-page">
+    <header class="start-header">
+      <h1 class="brand">News <span>&amp;</span> Sports <span>Daily</span></h1>
+      <p class="edition">Your Daily Briefing • Choose Your Dashboard</p>
+    </header>
+
+    <nav class="choice-buttons" aria-label="Dashboard selection">
+      <a href="modules/world/dashboard.html" class="choice-btn world">
+        <span class="choice-icon" role="img" aria-label="World News">🌍</span>
+        <span class="choice-title">World News</span>
+        <span class="choice-desc">Swiss + Global Headlines</span>
+      </a>
+
+      <a href="modules/sports/dashboard.html" class="choice-btn sports">
+        <span class="choice-icon" role="img" aria-label="Sports">⚽</span>
+        <span class="choice-title">Sports</span>
+        <span class="choice-desc">Heat Bar • Live Events</span>
+      </a>
+    </nav>
+
+    <hr class="divider">
+
+    <footer class="footer">
+      WORLD &amp; SPORTS NEWS DAILY • EST. 2024 • YOUR AUTOMATED BRIEFING
+    </footer>
+  </main>
+</body>
+</html>

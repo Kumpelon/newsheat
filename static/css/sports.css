@@ -1,0 +1,482 @@
+/* ==========================================================================
+   Sports Dashboard - Dark theme specific styles
+   ========================================================================== */
+
+/* Theme variables for sports dashboard (dark) */
+:root {
+  --color-bg: #0d1117;
+  --color-paper: #161b22;
+  --color-ink: #f0f0f0;
+  --color-accent: #e11d48;
+  --color-border: #30363d;
+  --color-text-muted: #8b949e;
+
+  /* Heat colors */
+  --heat-cold: #06b6d4;
+  --heat-cool: #22c55e;
+  --heat-warm: #eab308;
+  --heat-hot: #f97316;
+  --heat-inferno: #ef4444;
+
+  /* Heat gradient */
+  --heat-gradient: linear-gradient(90deg,
+    #06b6d4 0%,
+    #22c55e 25%,
+    #eab308 50%,
+    #f97316 75%,
+    #ef4444 100%
+  );
+}
+
+/* --------------------------------------------------------------------------
+   Page Layout
+   -------------------------------------------------------------------------- */
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  padding: var(--space-sm);
+  position: relative;
+}
+
+.newspaper {
+  background: var(--color-paper);
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+}
+
+/* Back link */
+.back-link {
+  position: absolute;
+  top: 0.5rem;
+  left: var(--space-lg);
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  z-index: 10;
+  transition: color var(--transition-fast);
+}
+
+.back-link:hover {
+  color: var(--color-ink);
+}
+
+/* --------------------------------------------------------------------------
+   Header
+   -------------------------------------------------------------------------- */
+header {
+  padding: var(--space-lg) var(--space-xl) var(--space-md);
+  text-align: center;
+}
+
+.masthead {
+  margin-bottom: var(--space-xs);
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-size: 2.8rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  line-height: 1.3;
+}
+
+.brand span:first-child {
+  margin-right: var(--space-sm);
+}
+
+.brand span:last-child {
+  color: var(--color-accent);
+}
+
+.edition {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-top: var(--space-xs);
+}
+
+.dateline {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  margin-top: var(--space-xs);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.dateline .sep {
+  width: 25px;
+  height: 1px;
+  background: var(--color-ink);
+}
+
+/* --------------------------------------------------------------------------
+   Headlines Bar
+   -------------------------------------------------------------------------- */
+.headlines-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-2xl);
+  border-bottom: var(--border-thin) solid var(--color-border);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  gap: var(--space-sm);
+}
+
+.control-btn {
+  background: var(--color-ink);
+  color: var(--color-paper);
+  border: none;
+}
+
+.control-btn:hover {
+  background: var(--color-accent);
+}
+
+/* --------------------------------------------------------------------------
+   Heat Strip
+   -------------------------------------------------------------------------- */
+.heat-strip {
+  padding: var(--space-md) var(--space-xl);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-lg);
+  border-bottom: var(--border-thin) solid var(--color-border);
+  background: var(--heat-gradient);
+}
+
+.heat-label {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  letter-spacing: 0.15em;
+  color: #fff;
+  text-shadow: 0 0 3px #000;
+}
+
+.heat-bar {
+  flex: 1;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.3);
+  border: 2px solid var(--color-ink);
+  position: relative;
+}
+
+.heat-bar-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: #1a1a1a;
+  transition: left var(--transition-slow);
+  border: 2px solid #fff;
+}
+
+.heat-markers {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2px;
+  pointer-events: none;
+}
+
+.heat-marker {
+  width: 1px;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.heat-indicator {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 180px;
+  color: #fff;
+  text-shadow: 0 0 3px #000;
+}
+
+.heat-breakdown {
+  display: flex;
+  gap: var(--space-sm);
+  margin-left: auto;
+}
+
+.sport-tag {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  padding: var(--space-xs) var(--space-sm);
+  background: rgba(0, 0, 0, 0.4);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* --------------------------------------------------------------------------
+   Source Grid (4 columns)
+   -------------------------------------------------------------------------- */
+.four-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 0;
+  border-top: 3px double var(--color-ink);
+}
+
+.four-col > div {
+  padding: var(--space-md) var(--space-lg);
+  border-right: var(--border-thin) solid var(--color-border);
+}
+
+.four-col > div:last-child {
+  border-right: none;
+}
+
+.source-card {
+  border-bottom: 1px dotted #444;
+  padding: var(--space-sm) 0;
+}
+
+.source-card:last-child {
+  border-bottom: none;
+}
+
+.source-name {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-decoration: none;
+  color: var(--color-ink);
+}
+
+.source-name:hover {
+  color: var(--color-accent);
+}
+
+.source-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.65rem;
+  color: var(--color-text-muted);
+  margin-top: var(--space-xs);
+}
+
+.heat-badge {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-sm);
+  vertical-align: middle;
+}
+
+/* --------------------------------------------------------------------------
+   Three Column Layout (Hot Events, Stats, Must Watch)
+   -------------------------------------------------------------------------- */
+.three-col {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 0;
+  border-top: var(--border-thin) solid var(--color-border);
+}
+
+.three-col > div {
+  padding: var(--space-lg) var(--space-xl);
+  border-right: var(--border-thin) solid var(--color-border);
+}
+
+.three-col > div:last-child {
+  border-right: none;
+}
+
+/* Hot Events */
+.heatevent-item {
+  padding: var(--space-sm) 0;
+  border-bottom: 1px dotted #444;
+}
+
+.heatevent-item:last-child {
+  border-bottom: none;
+}
+
+.heatevent-tag {
+  display: inline-block;
+  background: var(--color-accent);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  font-weight: 700;
+  padding: 0.1rem 0.3rem;
+  margin-right: var(--space-xs);
+}
+
+.heatevent-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.heatevent-title a {
+  color: var(--color-ink);
+  text-decoration: none;
+}
+
+.heatevent-title a:hover {
+  text-decoration: underline;
+}
+
+.heatevent-kw {
+  font-size: 0.6rem;
+  color: var(--heat-hot);
+  margin-top: var(--space-xs);
+  font-family: var(--font-mono);
+}
+
+/* Stats Sites */
+.stats-group {
+  margin-bottom: var(--space-md);
+}
+
+.stats-group-title {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--color-accent);
+  border-bottom: 1px solid #444;
+  padding-bottom: var(--space-xs);
+  margin-bottom: var(--space-xs);
+}
+
+.stats-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.stats-link {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--color-ink);
+  background: #2d333b;
+  padding: var(--space-xs) var(--space-sm);
+  text-decoration: none;
+  border: 1px solid #444;
+  transition: background var(--transition-fast),
+              border-color var(--transition-fast);
+}
+
+.stats-link:hover {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+/* Must Watch */
+.mustwatch-item {
+  padding: var(--space-sm) 0;
+  border-bottom: 1px dotted #444;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.mustwatch-item:last-child {
+  border-bottom: none;
+}
+
+.mustwatch-title {
+  flex: 1;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.mustwatch-title a {
+  color: var(--color-ink);
+  text-decoration: none;
+}
+
+.mustwatch-title a:hover {
+  text-decoration: underline;
+}
+
+/* Trending Tags */
+.trending-tag {
+  display: inline-block;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  padding: var(--space-xs) var(--space-sm);
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  margin: var(--space-xs) var(--space-xs) var(--space-xs) 0;
+}
+
+/* --------------------------------------------------------------------------
+   Footer
+   -------------------------------------------------------------------------- */
+footer {
+  padding: var(--space-md) var(--space-xl);
+  text-align: center;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .three-col,
+  .four-col {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .four-col > div:nth-child(2) {
+    border-right: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .three-col,
+  .four-col {
+    grid-template-columns: 1fr;
+  }
+
+  .three-col > div,
+  .four-col > div {
+    border-right: none;
+    border-bottom: var(--border-thin) solid var(--color-border);
+  }
+
+  .brand {
+    font-size: 2rem;
+  }
+
+  .back-link {
+    position: relative;
+    display: inline-block;
+    margin-bottom: var(--space-sm);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Utility - Heat Icons & Colors
+   -------------------------------------------------------------------------- */
+.heat-icon {
+  font-size: 0.7rem;
+}

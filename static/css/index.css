@@ -1,0 +1,183 @@
+/* ==========================================================================
+   Index Page - Start page specific styles
+   ========================================================================== */
+
+/* Theme variables for index page */
+:root {
+  /* Light theme */
+  --color-bg: #f5f1e8;
+  --color-paper: #faf8f3;
+  --color-ink: #1a1a1a;
+  --color-accent: #8b0000;
+  --color-accent-gold: #b8860b;
+  --color-border: #2a2a2a;
+  --color-text-muted: #555;
+}
+
+/* --------------------------------------------------------------------------
+   Page Layout
+   -------------------------------------------------------------------------- */
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+}
+
+.start-page {
+  text-align: center;
+  max-width: 900px;
+}
+
+/* --------------------------------------------------------------------------
+   Header / Masthead
+   -------------------------------------------------------------------------- */
+.brand {
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  line-height: 1.3;
+  margin-bottom: var(--space-sm);
+}
+
+.brand span {
+  color: var(--color-accent);
+}
+
+.edition {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-3xl);
+}
+
+/* --------------------------------------------------------------------------
+   Choice Buttons
+   -------------------------------------------------------------------------- */
+.choice-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2xl);
+}
+
+.choice-btn {
+  background: var(--color-paper);
+  border: 3px solid var(--color-ink);
+  padding: var(--space-3xl) var(--space-2xl);
+  cursor: pointer;
+  transition: transform var(--transition-normal),
+              box-shadow var(--transition-normal),
+              background var(--transition-normal),
+              border-color var(--transition-normal);
+  text-decoration: none;
+  display: block;
+}
+
+.choice-btn:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+.choice-btn:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-offset);
+}
+
+.choice-btn.world {
+  border-color: var(--color-accent);
+}
+
+.choice-btn.world:hover {
+  background: linear-gradient(135deg, #faf8f3 0%, #f0e8dc 100%);
+  border-color: #a00;
+}
+
+.choice-btn.sports {
+  border-color: var(--color-accent-gold);
+}
+
+.choice-btn.sports:hover {
+  background: linear-gradient(135deg, #faf8f3 0%, #f5f0dc 100%);
+  border-color: #daa520;
+}
+
+.choice-icon {
+  font-size: 4rem;
+  margin-bottom: var(--space-lg);
+}
+
+.choice-title {
+  font-family: var(--font-sans);
+  font-size: 2rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  margin-bottom: var(--space-sm);
+}
+
+.choice-desc {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+}
+
+/* --------------------------------------------------------------------------
+   Divider & Footer
+   -------------------------------------------------------------------------- */
+.divider {
+  width: 100%;
+  height: 3px;
+  background: var(--color-ink);
+  margin: var(--space-2xl) 0;
+  border: none;
+}
+
+.footer {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  margin-top: var(--space-3xl);
+  letter-spacing: 0.1em;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive - Mobile
+   -------------------------------------------------------------------------- */
+@media (max-width: 700px) {
+  .choice-buttons {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+
+  .brand {
+    font-size: 2.5rem;
+  }
+
+  .choice-btn {
+    padding: var(--space-2xl) var(--space-lg);
+  }
+
+  .choice-icon {
+    font-size: 3rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced Motion
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .choice-btn {
+    transition: none;
+  }
+
+  .choice-btn:hover {
+    transform: none;
+  }
+}

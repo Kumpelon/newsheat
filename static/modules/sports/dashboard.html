@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sports Daily</title>
+  <meta name="description" content="Your daily sports briefing with heat bar and live events">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=Merriweather:wght@400;700;900&family=Bebas+Neue&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../css/main.css">
+  <link rel="stylesheet" href="../../css/sports.css">
+</head>
+<body>
+  <a href="../../index.html" class="back-link">← START</a>
+
+  <main class="newspaper">
+    <div class="border-thick"></div>
+
+    <header class="dashboard-header">
+      <div class="masthead">
+        <h1 class="brand"><span>⚽</span> Sports <span>Daily</span></h1>
+      </div>
+      <p class="edition">Your Sports Briefing • Heat Bar Edition</p>
+      <div class="dateline">
+        <span id="currentDate"></span>
+        <span class="sep"></span>
+        <span id="currentTime"></span>
+        <span class="sep"></span>
+        <span id="lastUpdated" style="color: var(--color-text-muted)">–</span>
+      </div>
+    </header>
+
+    <div class="border-thin"></div>
+
+    <div class="headlines-bar">
+      <span>DAILY EDITION • <span id="articleCount">0</span> ARTICLES</span>
+      <span id="refreshCountdown" style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--color-text-muted)"></span>
+      <button class="control-btn" id="refreshBtn" onclick="fetchSports(true)" onkeydown="if(event.key==='Enter')fetchSports(true)">↻ REFRESH</button>
+    </div>
+
+    <section class="heat-strip" id="heat-strip" aria-label="Global heat indicator">
+      <span class="heat-label">◆ HEAT:</span>
+      <div class="heat-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+        <div class="heat-bar-fill" id="globalHeatBar"></div>
+        <div class="heat-markers">
+          <div class="heat-marker"></div>
+          <div class="heat-marker"></div>
+          <div class="heat-marker"></div>
+          <div class="heat-marker"></div>
+          <div class="heat-marker"></div>
+        </div>
+      </div>
+      <div class="heat-indicator" id="heat-indicator">
+        <span id="globalHeatLabel">Loading…</span>
+      </div>
+    </section>
+
+    <section class="four-col" aria-label="Sports sources">
+      <div>
+        <h2 class="section-title">🇨🇭 SWISS SPORT</h2>
+        <div id="swissSources1"><div class="loading"><div class="spinner"></div></div></div>
+      </div>
+      <div>
+        <h2 class="section-title">🇨🇭 SWISS SPORT</h2>
+        <div id="swissSources2"><div class="loading"><div class="spinner"></div></div></div>
+      </div>
+      <div>
+        <h2 class="section-title">🌍 GLOBAL SPORT</h2>
+        <div id="globalSources1"><div class="loading"><div class="spinner"></div></div></div>
+      </div>
+      <div>
+        <h2 class="section-title">🌍 GLOBAL SPORT</h2>
+        <div id="globalSources2"><div class="loading"><div class="spinner"></div></div></div>
+      </div>
+    </section>
+
+    <div class="border-double"></div>
+
+    <div class="three-col">
+      <section aria-label="Hot events">
+        <h2 class="section-title">🔥 HOT EVENTS</h2>
+        <div id="hotEvents"><div class="loading"><div class="spinner"></div></div></div>
+      </section>
+      <section aria-label="Stats sites">
+        <h2 class="section-title">📊 STATS</h2>
+        <div id="statsSites"><div class="loading"><div class="spinner"></div></div></div>
+      </section>
+      <section aria-label="Must watch">
+        <h2 class="section-title">⭐ MUST WATCH</h2>
+        <div id="mustWatch"><div class="loading"><div class="spinner"></div></div></div>
+      </section>
+    </div>
+
+    <div class="border-thick"></div>
+
+    <footer>
+      SPORTS NEWS DAILY • EST. 2024 • YOUR AUTOMATED SPORTS BRIEFING
+    </footer>
+  </main>
+
+  <script>
+    // ── Date / time ───────────────────────────────────────────────────────────
+    function updateDateTime() {
+      const now = new Date();
+      const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', opts).toUpperCase();
+      document.getElementById('currentTime').textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }).toUpperCase();
+    }
+    updateDateTime();
+    setInterval(updateDateTime, 30000);
+
+    // ── Heat helpers ──────────────────────────────────────────────────────────
+    const HEAT_COLORS = {
+      'iceberg': '#06b6d4', 'chill': '#22c55e', 'warming': '#eab308',
+      'hot': '#f97316', 'inferno': '#ef4444'
+    };
+    const HEAT_LABELS = {
+      'iceberg': 'ICEBERG', 'chill': 'CHILL', 'warming': 'WARMING UP',
+      'hot': 'HOT', 'inferno': 'ON FIRE'
+    };
+    function getHeatLevel(s) {
+      if (s <= 20) return 'iceberg';
+      if (s <= 40) return 'chill';
+      if (s <= 60) return 'warming';
+      if (s <= 80) return 'hot';
+      return 'inferno';
+    }
+
+    // ── Article quality filter ────────────────────────────────────────────────
+    const JUNK_PATTERNS = [
+      /breaking news.*video/i,
+      /latest news.*headlines/i,
+      /actualit[eé]s.*informations/i,
+      /aktuelle.*nachrichten/i,
+      /^news\s*\|/i,
+      /\|\s*today.*headlines/i,
+      /stay up to date with notifications/i,
+      /^(sport|news|sports news|home)(\s+home)?$/i,
+      /your daily (briefing|news)/i,
+    ];
+    function isRealArticle(title) {
+      if (!title || title.length < 25) return false;
+      const t = title.trim().toLowerCase();
+      for (const p of JUNK_PATTERNS) { if (p.test(t)) return false; }
+      return true;
+    }
+
+    // ── Renderers ─────────────────────────────────────────────────────────────
+    function renderSourceCard(source) {
+      if (source.error) return `<div class="source-card"><span class="source-name">${source.name}</span><div class="source-meta"><span>OFFLINE</span></div></div>`;
+      const hl = getHeatLevel(source.heat);
+      const color = HEAT_COLORS[hl];
+      return `<div class="source-card"><a href="${source.url}" target="_blank" rel="noopener" class="source-name">${source.name}</a><div class="source-meta"><span>${source.headlineCount} articles</span><span class="heat-badge" style="background:${color}" title="${HEAT_LABELS[hl]}"></span></div></div>`;
+    }
+
+    function renderHotEventItem(item) {
+      if (!isRealArticle(item.title) || !item.url) return '';
+      const color = HEAT_COLORS[getHeatLevel(item.heat)];
+      const url = item.url || `https://duckduckgo.com/?q=${encodeURIComponent(item.title)}`;
+      const kwDisplay = item.heatKeywords && item.heatKeywords.length ? item.heatKeywords.join(', ').toUpperCase() : '';
+      return `<div class="heatevent-item"><span class="heatevent-tag" style="background:${color}">HOT</span><div class="heatevent-title"><a href="${url}" target="_blank" rel="noopener">${item.title}</a></div>${kwDisplay ? `<div class="heatevent-kw">${kwDisplay}</div>` : ''}</div>`;
+    }
+
+    function renderMustWatchItem(item) {
+      if (!isRealArticle(item.title) || !item.url) return '';
+      const color = HEAT_COLORS[getHeatLevel(item.heat)];
+      const url = item.url || `https://duckduckgo.com/?q=${encodeURIComponent(item.title)}`;
+      return `<div class="mustwatch-item"><div class="mustwatch-title"><a href="${url}" target="_blank" rel="noopener">${item.title}</a></div><span class="heat-badge" style="background:${color}"></span></div>`;
+    }
+
+    function renderStatsSites(statsData) {
+      let html = '';
+      for (const [category, sites] of Object.entries(statsData)) {
+        if (!sites || sites.length === 0) continue;
+        html += `<div class="stats-group"><div class="stats-group-title">${category}</div><div class="stats-links">`;
+        for (const site of sites.slice(0, 4)) {
+          html += `<a href="${site.url}" target="_blank" rel="noopener" class="stats-link">${site.name}</a>`;
+        }
+        html += `</div></div>`;
+      }
+      return html || '<div class="loading">No stats</div>';
+    }
+
+    // ── Auto-refresh ──────────────────────────────────────────────────────────
+    const REFRESH_INTERVAL_MS = 15 * 60 * 1000; // 15 minutes
+    let countdownInterval = null;
+    let nextRefreshAt = null;
+
+    function startCountdown() {
+      if (countdownInterval) clearInterval(countdownInterval);
+      nextRefreshAt = Date.now() + REFRESH_INTERVAL_MS;
+      countdownInterval = setInterval(() => {
+        const remaining = Math.max(0, Math.ceil((nextRefreshAt - Date.now()) / 1000));
+        const m = Math.floor(remaining / 60);
+        const s = remaining % 60;
+        const el = document.getElementById('refreshCountdown');
+        if (el) el.textContent = `NEXT UPDATE ${m}:${String(s).padStart(2, '0')}`;
+        if (remaining <= 0) fetchSports(false);
+      }, 1000);
+    }
+
+    // ── Main fetch ────────────────────────────────────────────────────────────
+    async function fetchSports(isManual = false) {
+      const btn = document.getElementById('refreshBtn');
+      btn.disabled = true;
+      btn.textContent = 'Loading…';
+      startCountdown();
+
+      try {
+        const res = await fetch('/data/sports.json');
+        const data = await res.json();
+        const g = data.global;
+
+        // Heat bar
+        const barContainer = document.getElementById('globalHeatBar').parentElement;
+        const barWidth = barContainer.offsetWidth;
+        const position = (g.heat / 100) * barWidth;
+        document.getElementById('globalHeatBar').style.left = Math.max(0, position) + 'px';
+        document.getElementById('globalHeatLabel').textContent = (g.label || HEAT_LABELS[getHeatLevel(g.heat)]) + ' (' + g.heat + '°)';
+
+        // Article count
+        let total = 0;
+        const allSources = [...data.sources.swiss, ...data.sources.global];
+        allSources.forEach(s => { if (s.headlineCount) total += s.headlineCount; });
+        document.getElementById('articleCount').textContent = total;
+
+        // Sources
+        const swiss1 = data.sources.swiss.slice(0, 2);
+        const swiss2 = data.sources.swiss.slice(2, 4);
+        const global1 = data.sources.global.slice(0, 3);
+        const global2 = data.sources.global.slice(3, 6);
+        document.getElementById('swissSources1').innerHTML = swiss1.map(renderSourceCard).join('') || '<div class="loading">No data</div>';
+        document.getElementById('swissSources2').innerHTML = swiss2.map(renderSourceCard).join('') || '<div class="loading">No data</div>';
+        document.getElementById('globalSources1').innerHTML = global1.map(renderSourceCard).join('') || '<div class="loading">No data</div>';
+        document.getElementById('globalSources2').innerHTML = global2.map(renderSourceCard).join('') || '<div class="loading">No data</div>';
+
+        // Hot events — filter client-side
+        const hotEventsHtml = (data.hotEvents || [])
+          .filter(h => isRealArticle(h.title) && h.url)
+          .slice(0, 6)
+          .map(renderHotEventItem)
+          .filter(Boolean)
+          .join('');
+        document.getElementById('hotEvents').innerHTML = hotEventsHtml || '<div class="loading">No hot events</div>';
+
+        // Stats
+        document.getElementById('statsSites').innerHTML = renderStatsSites(data.statsSites || {});
+
+        // Must watch — filter client-side
+        const mustWatchHtml = (data.mustWatch || [])
+          .filter(h => isRealArticle(h.title) && h.url)
+          .slice(0, 8)
+          .map(renderMustWatchItem)
+          .filter(Boolean)
+          .join('');
+        document.getElementById('mustWatch').innerHTML = mustWatchHtml || '<div class="loading">No must-watch</div>';
+
+        // Last updated timestamp
+        const now = new Date();
+        document.getElementById('lastUpdated').textContent = 'UPDATED ' + now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+        updateDateTime();
+      } catch (e) {
+        console.error('fetchSports error:', e);
+        ['hotEvents', 'mustWatch'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el.querySelector('.spinner')) el.innerHTML = '<div class="loading">Connection error – retry in a moment</div>';
+        });
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '↻ REFRESH';
+      }
+    }
+
+    fetchSports(false);
+  </script>
+</body>
+</html>

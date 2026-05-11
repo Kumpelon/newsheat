@@ -1,0 +1,386 @@
+/* ==========================================================================
+   World Dashboard - Light theme specific styles
+   ========================================================================== */
+
+/* Theme variables for world dashboard (light) */
+:root {
+  --color-bg: #f5f1e8;
+  --color-paper: #faf8f3;
+  --color-ink: #1a1a1a;
+  --color-accent: #8b0000;
+  --color-border: #2a2a2a;
+  --color-text-muted: #555;
+
+  /* Mood colors */
+  --mood-very-negative: #8b0000;
+  --mood-negative: #b35c1b;
+  --mood-slightly-negative: #8b5a2b;
+  --mood-neutral: #6b6b6b;
+  --mood-slightly-positive: #4a7c4a;
+  --mood-positive: #2d5a2d;
+  --mood-very-positive: #1b4d1b;
+
+  /* Mood gradient */
+  --mood-gradient: linear-gradient(90deg,
+    #8b0000 0%,
+    #b35c1b 25%,
+    #6b6b6b 50%,
+    #4a7c4a 75%,
+    #1b4d1b 100%
+  );
+}
+
+/* --------------------------------------------------------------------------
+   Page Layout
+   -------------------------------------------------------------------------- */
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  padding: var(--space-sm);
+}
+
+.newspaper {
+  background: var(--color-paper);
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.15);
+}
+
+/* --------------------------------------------------------------------------
+   Header
+   -------------------------------------------------------------------------- */
+header {
+  padding: var(--space-lg) var(--space-xl) var(--space-md);
+  text-align: center;
+}
+
+.masthead {
+  margin-bottom: var(--space-xs);
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-size: 2.8rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  line-height: 1.3;
+}
+
+.brand span {
+  color: var(--color-accent);
+}
+
+.edition {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-top: var(--space-xs);
+}
+
+.dateline {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  margin-top: var(--space-xs);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.dateline .sep {
+  width: 25px;
+  height: 1px;
+  background: var(--color-ink);
+}
+
+/* --------------------------------------------------------------------------
+   Headlines Bar
+   -------------------------------------------------------------------------- */
+.headlines-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-2xl);
+  border-bottom: var(--border-thin) solid var(--color-border);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  gap: var(--space-sm);
+}
+
+.control-btn {
+  background: var(--color-ink);
+  color: var(--color-paper);
+  border: none;
+}
+
+.control-btn:hover {
+  background: var(--color-accent);
+}
+
+/* --------------------------------------------------------------------------
+   Mood Strip
+   -------------------------------------------------------------------------- */
+.mood-strip {
+  padding: var(--space-md) var(--space-xl);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-lg);
+  border-bottom: var(--border-thin) solid var(--color-border);
+  background: var(--mood-gradient);
+}
+
+.mood-label {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  letter-spacing: 0.15em;
+  color: #fff;
+  text-shadow: 0 0 3px #000;
+}
+
+.mood-bar {
+  flex: 1;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.3);
+  border: 2px solid var(--color-ink);
+  position: relative;
+}
+
+.mood-bar-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--color-ink);
+  transition: left var(--transition-slow);
+  border: 1px solid #fff;
+}
+
+.mood-markers {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2px;
+  pointer-events: none;
+}
+
+.mood-marker {
+  width: 1px;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.mood-indicator {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 180px;
+  color: #fff;
+  text-shadow: 0 0 3px #000;
+}
+
+/* --------------------------------------------------------------------------
+   Source Grid (4 columns)
+   -------------------------------------------------------------------------- */
+.four-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 0;
+  border-top: 3px double var(--color-ink);
+}
+
+.four-col > div {
+  padding: var(--space-md) var(--space-lg);
+  border-right: var(--border-thin) solid var(--color-border);
+}
+
+.four-col > div:last-child {
+  border-right: none;
+}
+
+.source-card {
+  border-bottom: 1px dotted #ccc;
+  padding: var(--space-sm) 0;
+}
+
+.source-card:last-child {
+  border-bottom: none;
+}
+
+.source-name {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-decoration: none;
+  color: var(--color-ink);
+}
+
+.source-name:hover {
+  color: var(--color-accent);
+}
+
+.source-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.65rem;
+  color: var(--color-text-muted);
+  margin-top: var(--space-xs);
+}
+
+/* --------------------------------------------------------------------------
+   Three Column Layout (Breaking, Trending, Must Read)
+   -------------------------------------------------------------------------- */
+.three-col {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 0;
+  border-top: var(--border-thin) solid var(--color-border);
+}
+
+.three-col > div {
+  padding: var(--space-lg) var(--space-xl);
+  border-right: var(--border-thin) solid var(--color-border);
+}
+
+.three-col > div:last-child {
+  border-right: none;
+}
+
+/* Breaking News */
+.breaking-item {
+  padding: var(--space-sm) 0;
+  border-bottom: 1px dotted #ccc;
+}
+
+.breaking-item:last-child {
+  border-bottom: none;
+}
+
+.breaking-tag {
+  display: inline-block;
+  background: var(--color-accent);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  font-weight: 700;
+  padding: 0.1rem 0.3rem;
+  margin-right: var(--space-xs);
+}
+
+.breaking-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.breaking-title a {
+  color: var(--color-ink);
+  text-decoration: none;
+}
+
+.breaking-title a:hover {
+  text-decoration: underline;
+}
+
+/* Trending Topics */
+.trending-tag {
+  display: inline-block;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  padding: var(--space-xs) var(--space-sm);
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  margin: var(--space-xs) var(--space-xs) var(--space-xs) 0;
+}
+
+/* Must Read */
+.mustread-item {
+  padding: var(--space-sm) 0;
+  border-bottom: 1px dotted #ccc;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.mustread-item:last-child {
+  border-bottom: none;
+}
+
+.mustread-title {
+  flex: 1;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.mustread-title a {
+  color: var(--color-ink);
+  text-decoration: none;
+}
+
+.mustread-title a:hover {
+  text-decoration: underline;
+}
+
+/* --------------------------------------------------------------------------
+   Footer
+   -------------------------------------------------------------------------- */
+footer {
+  padding: var(--space-md) var(--space-xl);
+  text-align: center;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .three-col,
+  .four-col {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .four-col > div:nth-child(2) {
+    border-right: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .three-col,
+  .four-col {
+    grid-template-columns: 1fr;
+  }
+
+  .three-col > div,
+  .four-col > div {
+    border-right: none;
+    border-bottom: var(--border-thin) solid var(--color-border);
+  }
+
+  .brand {
+    font-size: 2rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Utility - Mood Icons
+   -------------------------------------------------------------------------- */
+.mood-icon {
+  font-size: 0.7rem;
+}

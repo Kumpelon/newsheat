@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>World & Swiss News Daily</title>
+  <meta name="description" content="Your daily news briefing with Swiss and global headlines">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=Merriweather:wght@400;700;900&family=Bebas+Neue&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../css/main.css">
+  <link rel="stylesheet" href="../../css/world.css">
+</head>
+<body>
+  <!-- Back link — now present on World dashboard too (was missing) -->
+  <a href="../../index.html" class="back-link">← START</a>
+
+  <main class="newspaper">
+    <div class="border-thick"></div>
+
+    <header class="dashboard-header">
+      <div class="masthead">
+        <h1 class="brand">World <span>&amp;</span> Swiss News <span>Daily</span></h1>
+      </div>
+      <p class="edition">Your Daily Briefing • All News, All Sides</p>
+      <div class="dateline">
+        <span id="currentDate"></span>
+        <span class="sep"></span>
+        <span id="currentTime"></span>
+        <span class="sep"></span>
+        <span id="lastUpdated" style="color: var(--color-text-muted)">–</span>
+      </div>
+    </header>
+
+    <div class="border-thin"></div>
+
+    <div class="headlines-bar">
+      <span>DAILY EDITION • <span id="articleCount">0</span> ARTICLES</span>
+      <span id="refreshCountdown" style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--color-text-muted)"></span>
+      <button class="control-btn" id="refreshBtn" onclick="fetchNews(true)" onkeydown="if(event.key==='Enter')fetchNews(true)">↻ REFRESH</button>
+    </div>
+
+    <section class="mood-strip" id="mood-strip" aria-label="Global mood indicator">
+      <span class="mood-label">◆ MOOD:</span>
+      <div class="mood-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+        <div class="mood-bar-fill" id="globalMoodBar"></div>
+        <div class="mood-markers">
+          <div class="mood-marker"></div>
+          <div class="mood-marker"></div>
+          <div class="mood-marker"></div>
+          <div class="mood-marker"></div>
+          <div class="mood-marker"></div>
+        </div>
+      </div>
+      <div class="mood-indicator" id="mood-indicator">
+        <span id="globalMoodLabel">Loading…</span>
+      </div>
+    </section>
+
+    <section class="four-col" aria-label="News sources">
+      <div>
+        <h2 class="section-title">🇨🇭 SWISS</h2>
+        <div id="swissSources1"><div class="loading"><div class="spinner"></div></div></div>
+      </div>
+      <div>
+        <h2 class="section-title">🇨🇭 SWISS</h2>
+        <div id="swissSources2"><div class="loading"><div class="spinner"></div></div></div>
+      </div>
+      <div>
+        <h2 class="section-title">🌍 WORLD</h2>
+        <div id="worldSources1"><div class="loading"><div class="spinner"></div></div></div>
+      </div>
+      <div>
+        <h2 class="section-title">🌍 WORLD</h2>
+        <div id="worldSources2"><div class="loading"><div class="spinner"></div></div></div>
+      </div>
+    </section>
+
+    <div class="border-double"></div>
+
+    <div class="three-col">
+      <section aria-label="Breaking news">
+        <h2 class="section-title">🚨 BREAKING</h2>
+        <div id="breakingNews"><div class="loading"><div class="spinner"></div></div></div>
+      </section>
+      <section aria-label="Trending topics">
+        <h2 class="section-title">📈 TRENDING</h2>
+        <div id="trendingTopics"><div class="loading"><div class="spinner"></div></div></div>
+      </section>
+      <section aria-label="Must read articles">
+        <h2 class="section-title">⭐ MUST READ</h2>
+        <div id="mustRead"><div class="loading"><div class="spinner"></div></div></div>
+      </section>
+    </div>
+
+    <div class="border-thick"></div>
+
+    <footer>
+      WORLD & SWISS NEWS DAILY • EST. 2024 • YOUR AUTOMATED NEWS BRIEFING
+    </footer>
+  </main>
+
+  <script>
+    // ── Date / time ──────────────────────────────────────────────────────────
+    function updateDateTime() {
+      const now = new Date();
+      const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', opts).toUpperCase();
+      document.getElementById('currentTime').textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }).toUpperCase();
+    }
+    updateDateTime();
+    setInterval(updateDateTime, 30000);
+
+    // ── Mood helpers ─────────────────────────────────────────────────────────
+    const MOOD_COLORS = {
+      'very_negative': '#8b0000', 'negative': '#b35c1b', 'slightly_negative': '#8b5a2b',
+      'neutral': '#6b6b6b', 'slightly_positive': '#4a7c4a', 'positive': '#2d5a2d', 'very_positive': '#1b4d1b'
+    };
+    const MOOD_ICONS = {
+      'very_negative': '██', 'negative': '██', 'slightly_negative': '▓▓',
+      'neutral': '▒▒', 'slightly_positive': '░░', 'positive': '░░', 'very_positive': '░░'
+    };
+    const MOOD_LABELS = {
+      'very_negative': 'CRITICAL', 'negative': 'NEGATIVE', 'slightly_negative': 'CONCERNED',
+      'neutral': 'NEUTRAL', 'slightly_positive': 'HOPEFUL', 'positive': 'POSITIVE', 'very_positive': 'BREAKING GOOD'
+    };
+
+    function getMoodLevel(s) {
+      if (s <= 16) return 'very_negative';
+      if (s <= 33) return 'negative';
+      if (s <= 49) return 'slightly_negative';
+      if (s <= 66) return 'slightly_positive';
+      if (s <= 82) return 'positive';
+      return 'very_positive';
+    }
+
+    // ── Article quality filter (mirrors server-side logic) ───────────────────
+    const JUNK_PATTERNS = [
+      /breaking news.*video/i,
+      /latest news.*headlines/i,
+      /actualit[eé]s.*informations/i,
+      /aktuelle.*nachrichten/i,
+      /^news\s*\|/i,
+      /\|\s*today.*headlines/i,
+      /stay up to date with notifications/i,
+      /^opinions?\s*(&|&amp;|und|et)\s*chroniques?$/i,
+      /^actualit[eé]\s*des\s*r[eé]gions/i,
+      /^le choix de la r[eé]daction/i,
+      /^news home$/i,
+      /your daily (briefing|news)/i,
+      /^(home|search|menu|navigation|subscribe|sign in|log in)$/i,
+      /^(sport|news|politics|business|technology|culture|lifestyle)(\s+home)?$/i,
+    ];
+
+    function isRealArticle(title) {
+      if (!title || title.length < 25) return false;
+      const t = title.trim().toLowerCase();
+      for (const p of JUNK_PATTERNS) {
+        if (p.test(t)) return false;
+      }
+      return true;
+    }
+
+    // ── Renderers ─────────────────────────────────────────────────────────────
+    function renderSourceCard(source) {
+      if (source.error) return `<div class="source-card"><span class="source-name">${source.name}</span><div class="source-meta"><span>OFFLINE</span></div></div>`;
+      const ml = getMoodLevel(source.sentiment);
+      return `<div class="source-card"><a href="${source.url}" target="_blank" rel="noopener" class="source-name">${source.name}</a><div class="source-meta"><span>${source.headlineCount} articles</span><span title="${MOOD_LABELS[ml]}">${MOOD_ICONS[ml]}</span></div></div>`;
+    }
+
+    function renderBreakingItem(item) {
+      if (!isRealArticle(item.title) || !item.url) return '';
+      const ml = getMoodLevel(item.sentiment);
+      const url = item.url || `https://duckduckgo.com/?q=${encodeURIComponent(item.title)}`;
+      return `<div class="breaking-item"><span class="breaking-tag">BREAK</span><div class="breaking-title"><a href="${url}" target="_blank" rel="noopener">${item.title}</a></div></div>`;
+    }
+
+    function renderMustReadItem(item) {
+      if (!isRealArticle(item.title) || !item.url) return '';
+      const ml = getMoodLevel(item.sentiment);
+      const url = item.url || `https://duckduckgo.com/?q=${encodeURIComponent(item.title)}`;
+      return `<div class="mustread-item"><div class="mustread-title"><a href="${url}" target="_blank" rel="noopener">${item.title}</a></div><span title="${MOOD_LABELS[ml]}">${MOOD_ICONS[ml]}</span></div>`;
+    }
+
+    // ── Auto-refresh ──────────────────────────────────────────────────────────
+    const REFRESH_INTERVAL_MS = 15 * 60 * 1000; // 15 minutes
+    let refreshTimer = null;
+    let countdownInterval = null;
+    let nextRefreshAt = null;
+
+    function startCountdown() {
+      if (countdownInterval) clearInterval(countdownInterval);
+      nextRefreshAt = Date.now() + REFRESH_INTERVAL_MS;
+      countdownInterval = setInterval(() => {
+        const remaining = Math.max(0, Math.ceil((nextRefreshAt - Date.now()) / 1000));
+        const m = Math.floor(remaining / 60);
+        const s = remaining % 60;
+        const el = document.getElementById('refreshCountdown');
+        if (el) el.textContent = `NEXT UPDATE ${m}:${String(s).padStart(2, '0')}`;
+        if (remaining <= 0) fetchNews(false);
+      }, 1000);
+    }
+
+    // ── Main fetch ────────────────────────────────────────────────────────────
+    async function fetchNews(isManual = false) {
+      const btn = document.getElementById('refreshBtn');
+      btn.disabled = true;
+      btn.textContent = 'Loading…';
+
+      if (refreshTimer) clearTimeout(refreshTimer);
+      startCountdown();
+
+      try {
+        const res = await fetch('/data/news.json');
+        const data = await res.json();
+        const g = data.global;
+
+        // Mood bar
+        const barContainer = document.getElementById('globalMoodBar').parentElement;
+        const barWidth = barContainer.offsetWidth;
+        const position = (g.sentiment / 100) * barWidth;
+        document.getElementById('globalMoodBar').style.left = Math.max(0, position) + 'px';
+        document.getElementById('globalMoodLabel').textContent = (g.label || MOOD_LABELS[getMoodLevel(g.sentiment)]) + ' (' + g.sentiment + '%)';
+
+        // Article count
+        let total = 0;
+        const allSources = [...data.sources.swiss, ...data.sources.world];
+        allSources.forEach(s => { if (s.headlineCount) total += s.headlineCount; });
+        document.getElementById('articleCount').textContent = total;
+
+        // Sources
+        const swiss1 = data.sources.swiss.slice(0, 5);
+        const swiss2 = data.sources.swiss.slice(5, 10);
+        const world1 = data.sources.world.slice(0, 5);
+        const world2 = data.sources.world.slice(5, 10);
+        document.getElementById('swissSources1').innerHTML = swiss1.map(renderSourceCard).join('') || '<div class="loading">No data</div>';
+        document.getElementById('swissSources2').innerHTML = swiss2.map(renderSourceCard).join('') || '<div class="loading">No data</div>';
+        document.getElementById('worldSources1').innerHTML = world1.map(renderSourceCard).join('') || '<div class="loading">No data</div>';
+        document.getElementById('worldSources2').innerHTML = world2.map(renderSourceCard).join('') || '<div class="loading">No data</div>';
+
+        // Breaking news — filter client-side too
+        const breakingHtml = (data.breaking || [])
+          .filter(h => isRealArticle(h.title) && h.url)
+          .slice(0, 6)
+          .map(renderBreakingItem)
+          .filter(Boolean)
+          .join('');
+        document.getElementById('breakingNews').innerHTML = breakingHtml || '<div class="loading">No breaking news</div>';
+
+        // Trending topics
+        const trendingHtml = (data.trending || [])
+          .filter(t => t && t.length >= 4)
+          .map(t => `<span class="trending-tag">#${t}</span>`)
+          .join('');
+        document.getElementById('trendingTopics').innerHTML = trendingHtml || '<div class="loading">No trending topics</div>';
+
+        // Must read — filter client-side too
+        const mustReadHtml = (data.mustRead || [])
+          .filter(h => isRealArticle(h.title) && h.url)
+          .slice(0, 8)
+          .map(renderMustReadItem)
+          .filter(Boolean)
+          .join('');
+        document.getElementById('mustRead').innerHTML = mustReadHtml || '<div class="loading">No must-read articles</div>';
+
+        // Last updated timestamp
+        const now = new Date();
+        document.getElementById('lastUpdated').textContent = 'UPDATED ' + now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+        updateDateTime();
+      } catch (e) {
+        console.error('fetchNews error:', e);
+        ['breakingNews', 'trendingTopics', 'mustRead'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el.querySelector('.spinner')) el.innerHTML = '<div class="loading">Connection error – retry in a moment</div>';
+        });
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '↻ REFRESH';
+      }
+    }
+
+    fetchNews(false);
+  </script>
+</body>
+</html>
