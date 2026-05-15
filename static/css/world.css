@@ -37,6 +37,25 @@ body {
   background: var(--color-bg);
   color: var(--color-ink);
   padding: var(--space-sm);
+  position: relative;
+}
+
+/* Back link */
+.back-link {
+  position: absolute;
+  top: 0.5rem;
+  left: var(--space-lg);
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  z-index: 10;
+  transition: color var(--transition-fast);
+}
+
+.back-link:hover {
+  color: var(--color-ink);
 }
 
 .newspaper {
@@ -68,6 +87,16 @@ header {
 
 .brand span {
   color: var(--color-accent);
+}
+
+.brand-icon-sm {
+  width: 28px;
+  height: auto;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: var(--space-sm);
+  position: relative;
+  top: -2px;
 }
 
 .edition {
@@ -375,6 +404,12 @@ footer {
 
   .brand {
     font-size: 2rem;
+  }
+
+  .back-link {
+    position: relative;
+    display: inline-block;
+    margin-bottom: var(--space-sm);
   }
 }
 

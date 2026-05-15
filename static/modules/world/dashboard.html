@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>World & Swiss News Daily</title>
-  <meta name="description" content="Your daily news briefing with Swiss and global headlines">
+  <title>Newsheat World News</title>
+  <meta name="description" content="Newsheat World News — Daily briefing with Swiss and global headlines">
+  <link rel="icon" href="../../images/favicon.svg" type="image/svg+xml">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,7 +23,7 @@
 
     <header class="dashboard-header">
       <div class="masthead">
-        <h1 class="brand">World <span>&amp;</span> Swiss News <span>Daily</span></h1>
+        <h1 class="brand"><img src="../../images/favicon.svg" alt="" aria-hidden="true" class="brand-icon-sm"> World <span>&amp;</span> Swiss News <span>Daily</span></h1>
       </div>
       <p class="edition">Your Daily Briefing • All News, All Sides</p>
       <div class="dateline">
@@ -44,6 +45,64 @@
 
     <section class="mood-strip" id="mood-strip" aria-label="Global mood indicator">
       <span class="mood-label">◆ MOOD:</span>
+      <div class="bar-info-wrap">
+        <button class="bar-info-btn" aria-label="How is the Mood score calculated?" type="button">ⓘ</button>
+        <div class="bar-info-panel" role="tooltip">
+          <div class="bar-info-heading">HOW MOOD IS CALCULATED</div>
+          <div class="bar-scale-visual">
+            <div class="bar-scale-bar" style="background:linear-gradient(90deg,#8b0000 0%,#b35c1b 25%,#6b6b6b 50%,#4a7c4a 75%,#1b4d1b 100%)"></div>
+            <div class="bar-scale-labels">
+              <span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span>
+            </div>
+          </div>
+          <div class="bar-zones">
+            <div class="bar-zone-item">
+              <span class="bar-zone-dot" style="background:#8b0000"></span>
+              <span class="bar-zone-name">CRITICAL</span>
+              <span class="bar-zone-range">0–16%</span>
+              <span class="bar-zone-desc">crisis level news</span>
+            </div>
+            <div class="bar-zone-item">
+              <span class="bar-zone-dot" style="background:#b35c1b"></span>
+              <span class="bar-zone-name">NEGATIVE</span>
+              <span class="bar-zone-range">17–33%</span>
+              <span class="bar-zone-desc">predominantly negative</span>
+            </div>
+            <div class="bar-zone-item">
+              <span class="bar-zone-dot" style="background:#8b5a2b"></span>
+              <span class="bar-zone-name">CONCERNED</span>
+              <span class="bar-zone-range">34–49%</span>
+              <span class="bar-zone-desc">slightly negative lean</span>
+            </div>
+            <div class="bar-zone-item">
+              <span class="bar-zone-dot" style="background:#4a7c4a"></span>
+              <span class="bar-zone-name">HOPEFUL</span>
+              <span class="bar-zone-range">50–66%</span>
+              <span class="bar-zone-desc">slightly positive lean</span>
+            </div>
+            <div class="bar-zone-item">
+              <span class="bar-zone-dot" style="background:#2d5a2d"></span>
+              <span class="bar-zone-name">POSITIVE</span>
+              <span class="bar-zone-range">67–82%</span>
+              <span class="bar-zone-desc">good news dominates</span>
+            </div>
+            <div class="bar-zone-item">
+              <span class="bar-zone-dot" style="background:#1b4d1b"></span>
+              <span class="bar-zone-name">BREAKING GOOD</span>
+              <span class="bar-zone-range">83–100%</span>
+              <span class="bar-zone-desc">exceptional positivity</span>
+            </div>
+          </div>
+          <div class="bar-info-factors">
+            <div class="bar-info-factor-title">SCORE FACTORS:</div>
+            <div class="bar-info-factor-list">
+              <span>Sentiment analysis of headlines per source</span>
+              <span>Weighted average across all sources</span>
+              <span>Breaking news impact on overall score</span>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="mood-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
         <div class="mood-bar-fill" id="globalMoodBar"></div>
         <div class="mood-markers">
@@ -98,7 +157,7 @@
     <div class="border-thick"></div>
 
     <footer>
-      WORLD & SWISS NEWS DAILY • EST. 2024 • YOUR AUTOMATED NEWS BRIEFING
+      NEWSHEAT WORLD • EST. 2024 • YOUR AUTOMATED NEWS BRIEFING
     </footer>
   </main>
 
