@@ -94,6 +94,10 @@
               <span>Must-watch event importance weighting</span>
             </div>
           </div>
+          <div class="bar-live-section">
+            <div class="bar-live-title">LIVE SOURCE BREAKDOWN</div>
+            <div id="heatLiveBreakdown"><span style="color:rgba(255,255,255,0.25);font-family:var(--font-mono);font-size:0.65rem">Waiting for data…</span></div>
+          </div>
         </div>
       </div>
       <div class="heat-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
@@ -180,6 +184,22 @@
       if (s <= 60) return 'warming';
       if (s <= 80) return 'hot';
       return 'inferno';
+    }
+
+    function updateHeatTooltipLive(sources) {
+      const live = sources.filter(s => !s.error);
+      if (!live.length) return;
+      const order = ['iceberg', 'chill', 'warming', 'hot', 'inferno'];
+      const counts = {};
+      order.forEach(k => counts[k] = 0);
+      live.forEach(s => { counts[getHeatLevel(s.heat)]++; });
+      let html = `<div class="bar-live-summary">${live.length} source${live.length !== 1 ? 's' : ''} tracked</div>`;
+      for (const level of order) {
+        if (!counts[level]) continue;
+        const pct = Math.round((counts[level] / live.length) * 100);
+        html += `<div class="bar-live-row"><span class="bar-zone-dot" style="background:${HEAT_COLORS[level]}"></span><span class="bar-live-label">${HEAT_LABELS[level]}</span><div class="bar-live-bar"><div class="bar-live-fill" style="width:${pct}%;background:${HEAT_COLORS[level]}"></div></div><span class="bar-live-count">${counts[level]}</span></div>`;
+      }
+      document.getElementById('heatLiveBreakdown').innerHTML = html;
     }
 
     // ── Article quality filter ────────────────────────────────────────────────
@@ -289,6 +309,7 @@
         document.getElementById('swissSources2').innerHTML = swiss2.map(renderSourceCard).join('') || '<div class="loading">No data</div>';
         document.getElementById('globalSources1').innerHTML = global1.map(renderSourceCard).join('') || '<div class="loading">No data</div>';
         document.getElementById('globalSources2').innerHTML = global2.map(renderSourceCard).join('') || '<div class="loading">No data</div>';
+        updateHeatTooltipLive([...data.sources.swiss, ...data.sources.global]);
 
         // Hot events — filter client-side
         const hotEventsHtml = (data.hotEvents || [])

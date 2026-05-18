@@ -435,7 +435,7 @@ h6 {
   position: absolute;
   top: calc(100% + 10px);
   left: -8px;
-  width: 290px;
+  width: min(360px, calc(100vw - 1rem));
   background: rgba(10, 10, 18, 0.97);
   border: 1px solid rgba(255, 255, 255, 0.14);
   padding: var(--space-md) var(--space-md) var(--space-sm);
@@ -477,7 +477,7 @@ h6 {
 
 .bar-info-heading {
   font-family: var(--font-sans);
-  font-size: 0.72rem;
+  font-size: clamp(0.82rem, 2.5vw, 1rem);
   letter-spacing: 0.12em;
   color: rgba(255, 255, 255, 0.9);
   margin-bottom: var(--space-sm);
@@ -491,16 +491,16 @@ h6 {
 }
 
 .bar-scale-bar {
-  height: 7px;
-  border-radius: 2px;
-  margin-bottom: 3px;
+  height: 9px;
+  border-radius: 3px;
+  margin-bottom: 4px;
 }
 
 .bar-scale-labels {
   display: flex;
   justify-content: space-between;
   font-family: var(--font-mono);
-  font-size: 0.45rem;
+  font-size: clamp(0.6rem, 1.8vw, 0.72rem);
   color: rgba(255, 255, 255, 0.4);
 }
 
@@ -508,40 +508,40 @@ h6 {
 .bar-zones {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 5px;
   margin-bottom: var(--space-sm);
 }
 
 .bar-zone-item {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
 
 .bar-zone-dot {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 2px;
   flex-shrink: 0;
 }
 
 .bar-zone-name {
   font-family: var(--font-sans);
-  font-size: 0.62rem;
+  font-size: clamp(0.72rem, 2.2vw, 0.85rem);
   letter-spacing: 0.05em;
   color: rgba(255, 255, 255, 0.88);
-  min-width: 68px;
+  min-width: 80px;
 }
 
 .bar-zone-range {
   font-family: var(--font-mono);
-  font-size: 0.5rem;
+  font-size: clamp(0.62rem, 1.8vw, 0.72rem);
   color: rgba(255, 255, 255, 0.45);
-  min-width: 46px;
+  min-width: 52px;
 }
 
 .bar-zone-desc {
-  font-size: 0.5rem;
+  font-size: clamp(0.62rem, 1.8vw, 0.72rem);
   color: rgba(255, 255, 255, 0.42);
   font-style: italic;
   font-family: var(--font-serif);
@@ -551,43 +551,99 @@ h6 {
 .bar-info-factors {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding-top: var(--space-xs);
+  margin-bottom: var(--space-sm);
 }
 
 .bar-info-factor-title {
   font-family: var(--font-sans);
-  font-size: 0.58rem;
+  font-size: clamp(0.65rem, 2vw, 0.78rem);
   letter-spacing: 0.1em;
   color: rgba(255, 255, 255, 0.45);
-  margin-bottom: 3px;
+  margin-bottom: 4px;
 }
 
 .bar-info-factor-list {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 2px;
 }
 
 .bar-info-factor-list span {
   font-family: var(--font-serif);
-  font-size: 0.5rem;
+  font-size: clamp(0.62rem, 1.8vw, 0.72rem);
   color: rgba(255, 255, 255, 0.42);
-  padding-left: 10px;
+  padding-left: 12px;
   position: relative;
 }
 
 .bar-info-factor-list span::before {
   content: '·';
   position: absolute;
-  left: 2px;
+  left: 3px;
   color: rgba(255, 255, 255, 0.35);
+}
+
+/* Live breakdown section */
+.bar-live-section {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: var(--space-sm);
+}
+
+.bar-live-title {
+  font-family: var(--font-sans);
+  font-size: clamp(0.65rem, 2vw, 0.78rem);
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.45);
+  margin-bottom: var(--space-xs);
+}
+
+.bar-live-summary {
+  font-family: var(--font-mono);
+  font-size: clamp(0.6rem, 1.8vw, 0.7rem);
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: var(--space-xs);
+}
+
+.bar-live-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 4px;
+}
+
+.bar-live-label {
+  font-family: var(--font-sans);
+  font-size: clamp(0.65rem, 2vw, 0.75rem);
+  color: rgba(255, 255, 255, 0.75);
+  min-width: 82px;
+}
+
+.bar-live-bar {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.bar-live-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+
+.bar-live-count {
+  font-family: var(--font-mono);
+  font-size: clamp(0.6rem, 1.8vw, 0.7rem);
+  color: rgba(255, 255, 255, 0.5);
+  min-width: 18px;
+  text-align: right;
 }
 
 /* Mobile: reposition panel if near left edge */
 @media (max-width: 600px) {
   .bar-info-panel {
     left: -4px;
-    width: calc(100vw - 32px);
-    max-width: 290px;
   }
 }
 

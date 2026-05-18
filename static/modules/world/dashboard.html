@@ -101,6 +101,10 @@
               <span>Breaking news impact on overall score</span>
             </div>
           </div>
+          <div class="bar-live-section">
+            <div class="bar-live-title">LIVE SOURCE BREAKDOWN</div>
+            <div id="moodLiveBreakdown"><span style="color:rgba(255,255,255,0.25);font-family:var(--font-mono);font-size:0.65rem">Waiting for data…</span></div>
+          </div>
         </div>
       </div>
       <div class="mood-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
@@ -193,6 +197,22 @@
       if (s <= 66) return 'slightly_positive';
       if (s <= 82) return 'positive';
       return 'very_positive';
+    }
+
+    function updateMoodTooltipLive(sources) {
+      const live = sources.filter(s => !s.error);
+      if (!live.length) return;
+      const order = ['very_negative', 'negative', 'slightly_negative', 'slightly_positive', 'positive', 'very_positive'];
+      const counts = {};
+      order.forEach(k => counts[k] = 0);
+      live.forEach(s => { counts[getMoodLevel(s.sentiment)]++; });
+      let html = `<div class="bar-live-summary">${live.length} source${live.length !== 1 ? 's' : ''} tracked</div>`;
+      for (const level of order) {
+        if (!counts[level]) continue;
+        const pct = Math.round((counts[level] / live.length) * 100);
+        html += `<div class="bar-live-row"><span class="bar-zone-dot" style="background:${MOOD_COLORS[level]}"></span><span class="bar-live-label">${MOOD_LABELS[level]}</span><div class="bar-live-bar"><div class="bar-live-fill" style="width:${pct}%;background:${MOOD_COLORS[level]}"></div></div><span class="bar-live-count">${counts[level]}</span></div>`;
+      }
+      document.getElementById('moodLiveBreakdown').innerHTML = html;
     }
 
     // ── Article quality filter (mirrors server-side logic) ───────────────────
@@ -298,6 +318,7 @@
         document.getElementById('swissSources2').innerHTML = swiss2.map(renderSourceCard).join('') || '<div class="loading">No data</div>';
         document.getElementById('worldSources1').innerHTML = world1.map(renderSourceCard).join('') || '<div class="loading">No data</div>';
         document.getElementById('worldSources2').innerHTML = world2.map(renderSourceCard).join('') || '<div class="loading">No data</div>';
+        updateMoodTooltipLive([...data.sources.swiss, ...data.sources.world]);
 
         // Breaking news — filter client-side too
         const breakingHtml = (data.breaking || [])
